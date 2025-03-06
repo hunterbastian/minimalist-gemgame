@@ -5,7 +5,7 @@ All notable changes to the Minimalist Gem Game will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.0] - 2025-03-06
 
 ### Added
 - Initial project setup
@@ -20,17 +20,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Upgrade system for pickaxes and auto miners
   - Floating text animations for feedback
 
-## [0.1.0] - (Future Date)
 
-### Planned
-- Save/load game functionality
-- More upgrade types
-- Enhanced visual effects
-- Game balance improvements
 
-### Planned for Future Releases
-- Different rock types with varying mineral yields
-- Special rare gems with unique bonuses
-- Multiple tiers of automated mining equipment
-- Statistics tracking
-- Achievement system 
