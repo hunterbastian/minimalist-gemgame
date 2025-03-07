@@ -4,104 +4,166 @@
     box-sizing: border-box;
 }
 
+/* Global reset for all dynamically created elements */
+div, span {
+    box-sizing: border-box;
+}
+
+/* Extremely aggressive override to prevent blue boxes */
+div:not(.rock):not(.mining-area):not(.game-container):not(.resource-display):not(.minerals), 
+span, 
+[class*="text"], 
+[class*="animation"] {
+    background: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+}
+
+/* Additional force for floating text */
+*[style*="position: absolute"] {
+    background: none !important;
+    background-color: transparent !important;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #1a1a1a;
-    color: #e0e0e0;
+    font-family: 'Roboto Mono', monospace;
+    background: linear-gradient(135deg, #c8e0ed, #b8d5cc);
+    color: #333333;
     line-height: 1.6;
+    min-height: 100vh;
 }
 
 .game-container {
-    max-width: 900px;
+    max-width: 500px;
     margin: 0 auto;
-    padding: 20px;
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    grid-template-rows: auto 1fr;
-    gap: 20px;
-    height: 100vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    gap: 10px;
 }
 
 header {
-    grid-column: 1 / -1;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    border-bottom: 1px solid #444;
-    padding-bottom: 15px;
+    padding-bottom: 8px;
+    margin-bottom: 5px;
 }
 
-h1, h2, h3 {
-    color: #ffffff;
+h1 {
+    font-size: 1.5rem;
+}
+
+h2 {
+    font-size: 1.2rem;
+}
+
+h3 {
+    font-size: 1rem;
 }
 
 .resource-display {
-    font-size: 1.2rem;
-    color: #cccccc;
-    background-color: #333;
-    padding: 10px 15px;
-    border-radius: 5px;
+    font-size: 1rem;
+    color: #2c3e50;
+    background-color: rgba(220, 235, 245, 0.8);
+    padding: 5px 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 15px;
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 main {
-    grid-column: 1 / 2;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 8vh;
 }
 
 .mining-area {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    background-color: #2a2a2a;
-    border-radius: 8px;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, rgba(225, 235, 245, 0.7), rgba(215, 232, 245, 0.7), rgba(220, 238, 245, 0.7));
+    border-radius: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .rock {
-    width: 150px;
-    height: 150px;
-    background-color: #555;
-    border-radius: 20px;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(145deg, #7d8a9a, #5d697a);
+    border-radius: 0;
     cursor: pointer;
     transition: transform 0.1s, background-color 0.3s;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 
+        5px 5px 10px rgba(0, 0, 0, 0.2),
+        -5px -5px 10px rgba(255, 255, 255, 0.1),
+        inset 1px 1px 1px rgba(255, 255, 255, 0.2),
+        inset -1px -1px 1px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .rock:hover {
-    background-color: #666;
+    background: linear-gradient(145deg, #859cb0, #667b8e);
+    box-shadow: 
+        6px 6px 12px rgba(0, 0, 0, 0.25),
+        -6px -6px 12px rgba(255, 255, 255, 0.15),
+        inset 1px 1px 1px rgba(255, 255, 255, 0.3),
+        inset -1px -1px 1px rgba(0, 0, 0, 0.3);
 }
 
 .rock:active {
     transform: scale(0.95);
+    background: linear-gradient(145deg, #6d7a8a, #4d596a);
+    box-shadow: 
+        inset 4px 4px 8px rgba(0, 0, 0, 0.3),
+        inset -2px -2px 6px rgba(255, 255, 255, 0.1);
 }
 
+/* Remove gem-related classes */
 .gem {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background-color: #9999ff;
-    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    display: none;
 }
 
-.upgrade-shop {
-    grid-column: 2 / 3;
-    background-color: #2a2a2a;
-    padding: 15px;
-    border-radius: 8px;
+.gem-text {
+    display: none;
 }
 
-.upgrade {
-    background-color: #333;
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 5px;
-    transition: background-color 0.2s;
+.gem-bonus-text {
+    display: none;
 }
 
-.upgrade:hover {
-    background-color: #3a3a3a;
+.mining-area.gem-found {
+    animation: none;
+}
+
+@keyframes gem-shine {
+    /* Empty to override */
+}
+
+@keyframes area-pulse {
+    /* Empty to override */
+}
+
+@keyframes gem-text-float {
+    /* Empty to override */
 }
 
 button {
@@ -127,12 +189,41 @@ button:disabled {
 
 /* Animation for minerals gained */
 @keyframes mineral-gain {
-    0% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
+    /* No longer used, removing */
+}
+
+footer {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #777;
+    padding: 10px 0;
+    width: 100%;
+}
+
+/* Fix for floating text elements to prevent blue boxes */
+.gem-text, [style*="animation: mineral-gain"] {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Floating text styles */
+.floating-text {
+    /* No longer used, removing */
+}
+
+.gem-bonus-text {
+    position: absolute;
+    color: #5d99c6;
+    font-size: 1.3rem;
+    font-weight: 500;
+    pointer-events: none;
+    animation: mineral-gain 1.2s forwards;
+    background: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
 } 

@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimalist Gem Game</title>
+    <title>minimalist gem game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="game-container">
         <header>
-            <h1>Minimalist Gem Game</h1>
-            <div class="resource-display">
-                <div class="minerals">
-                    <span>Minerals:</span>
-                    <span id="mineral-count">0</span>
-                </div>
-            </div>
+            <h1>minimalist gem game</h1>
         </header>
+
+        <div class="resource-display">
+            <div class="minerals">
+                <span>minerals:</span>
+                <span id="mineral-count">0</span>
+            </div>
+        </div>
 
         <main>
             <div class="mining-area">
@@ -25,22 +29,10 @@
                 </div>
             </div>
         </main>
-
-        <aside class="upgrade-shop">
-            <h2>Upgrades</h2>
-            <div class="upgrade" id="pickaxe-upgrade">
-                <h3>Better Pickaxe</h3>
-                <p>+1 mineral per click</p>
-                <p>Cost: <span id="pickaxe-cost">10</span> minerals</p>
-                <button id="buy-pickaxe">Buy</button>
-            </div>
-            <div class="upgrade" id="auto-miner-upgrade">
-                <h3>Auto Miner</h3>
-                <p>Mines 1 mineral every 5 seconds</p>
-                <p>Cost: <span id="auto-miner-cost">50</span> minerals</p>
-                <button id="buy-auto-miner">Buy</button>
-            </div>
-        </aside>
+        
+        <footer>
+            <p>© 2025 hunter bastian</p>
+        </footer>
     </div>
     <script src="main.js"></script>
 </body>

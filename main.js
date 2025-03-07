@@ -2,44 +2,41 @@
 const gameState = {
     minerals: 0,
     mineralsPerClick: 1,
-    autoMiners: 0,
-    autoMinerRate: 1, // minerals per auto miner per interval
-    autoMinerInterval: 5000, // 5 seconds
-    gemChance: 0.1, // 10% chance of finding a gem when clicking
-    upgradesCost: {
-        pickaxe: 10,
-        autoMiner: 50
-    },
-    upgradeCostMultiplier: 1.5 // Cost increases by 50% with each purchase
+    initialized: false // Track if game has been initialized
 };
 
 // DOM elements
 const rockElement = document.getElementById('rock');
 const mineralCountElement = document.getElementById('mineral-count');
-const buyPickaxeButton = document.getElementById('buy-pickaxe');
-const buyAutoMinerButton = document.getElementById('buy-auto-miner');
-const pickaxeCostElement = document.getElementById('pickaxe-cost');
-const autoMinerCostElement = document.getElementById('auto-miner-cost');
 
 // Initialize game
 function initGame() {
+    // Prevent multiple initializations
+    if (gameState.initialized) return;
+    
     updateUI();
     setupEventListeners();
-    startAutoMining();
+    
+    // Mark as initialized
+    gameState.initialized = true;
+    
+    console.log('Game initialized');
 }
 
 // Event listeners
 function setupEventListeners() {
-    // Click on rock to mine
-    rockElement.addEventListener('click', handleRockClick);
+    // Remove any existing listeners first to prevent duplicates
+    rockElement.removeEventListener('click', handleRockClick);
     
-    // Buy upgrades
-    buyPickaxeButton.addEventListener('click', buyPickaxeUpgrade);
-    buyAutoMinerButton.addEventListener('click', buyAutoMinerUpgrade);
+    // Add click listener
+    rockElement.addEventListener('click', handleRockClick);
 }
 
 // Handle rock clicking
-function handleRockClick() {
+function handleRockClick(event) {
+    // Prevent event from potentially firing multiple times
+    event.preventDefault();
+    
     // Add minerals based on current click power
     addMinerals(gameState.mineralsPerClick);
     
@@ -51,9 +48,6 @@ function handleRockClick() {
     
     // Create floating text for minerals gained
     createFloatingText(`+${gameState.mineralsPerClick}`);
-    
-    // Check for gem
-    checkForGem();
 }
 
 // Add minerals to the player's total
@@ -64,112 +58,62 @@ function addMinerals(amount) {
 
 // Create floating text effect
 function createFloatingText(text) {
-    const floatingText = document.createElement('div');
+    // Use a span instead of a div
+    const floatingText = document.createElement('span');
     floatingText.textContent = text;
+    
+    // Apply direct styles to avoid CSS class issues
     floatingText.style.position = 'absolute';
     floatingText.style.color = 'white';
     floatingText.style.fontSize = '1.2rem';
+    floatingText.style.fontWeight = '400';
     floatingText.style.pointerEvents = 'none';
-    floatingText.style.animation = 'mineral-gain 1s forwards';
+    floatingText.style.textShadow = '0 0 2px rgba(0, 0, 0, 0.5)';
+    floatingText.style.backgroundColor = 'transparent';
+    floatingText.style.background = 'none';
+    floatingText.style.boxShadow = 'none';
+    floatingText.style.border = 'none';
+    floatingText.style.outline = 'none';
+    floatingText.style.zIndex = '100';
     
-    // Random position around the rock
+    // Position
     const randomX = Math.random() * 60 - 30;
     floatingText.style.left = `calc(50% + ${randomX}px)`;
     floatingText.style.top = '40%';
     
+    // Add to DOM
     rockElement.appendChild(floatingText);
     
-    // Remove the element after animation
-    setTimeout(() => {
-        floatingText.remove();
-    }, 1000);
-}
-
-// Check if player found a gem
-function checkForGem() {
-    if (Math.random() < gameState.gemChance) {
-        // Player found a gem!
-        const gemBonus = 5 * gameState.mineralsPerClick;
-        addMinerals(gemBonus);
-        
-        // Create gem visual effect
-        showGem(gemBonus);
-    }
-}
-
-// Show gem visual effect
-function showGem(bonus) {
-    const gem = document.createElement('div');
-    gem.className = 'gem';
-    rockElement.appendChild(gem);
+    // Animate manually with JavaScript instead of CSS animations
+    let opacity = 1;
+    let yPos = 0;
+    const startTime = Date.now();
+    const duration = 1000; // 1 second
     
-    // Create floating text for gem bonus
-    createFloatingText(`Gem! +${bonus}`);
-    
-    // Remove gem after animation
-    setTimeout(() => {
-        gem.remove();
-    }, 1000);
-}
-
-// Buy pickaxe upgrade
-function buyPickaxeUpgrade() {
-    const cost = gameState.upgradesCost.pickaxe;
-    
-    if (gameState.minerals >= cost) {
-        // Subtract cost
-        gameState.minerals -= cost;
+    const animate = function() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
         
-        // Improve click power
-        gameState.mineralsPerClick += 1;
+        opacity = 1 - progress;
+        yPos = -20 * progress;
         
-        // Increase future cost
-        gameState.upgradesCost.pickaxe = Math.floor(cost * gameState.upgradeCostMultiplier);
+        floatingText.style.opacity = opacity;
+        floatingText.style.transform = `translateY(${yPos}px)`;
         
-        updateUI();
-    }
-}
-
-// Buy auto miner upgrade
-function buyAutoMinerUpgrade() {
-    const cost = gameState.upgradesCost.autoMiner;
-    
-    if (gameState.minerals >= cost) {
-        // Subtract cost
-        gameState.minerals -= cost;
-        
-        // Add auto miner
-        gameState.autoMiners += 1;
-        
-        // Increase future cost
-        gameState.upgradesCost.autoMiner = Math.floor(cost * gameState.upgradeCostMultiplier);
-        
-        updateUI();
-    }
-}
-
-// Start auto mining process
-function startAutoMining() {
-    setInterval(() => {
-        if (gameState.autoMiners > 0) {
-            const mineralsGained = gameState.autoMiners * gameState.autoMinerRate;
-            addMinerals(mineralsGained);
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        } else {
+            floatingText.remove();
         }
-    }, gameState.autoMinerInterval);
+    };
+    
+    requestAnimationFrame(animate);
 }
 
 // Update UI elements
 function updateUI() {
     // Update mineral count
     mineralCountElement.textContent = gameState.minerals;
-    
-    // Update upgrade costs
-    pickaxeCostElement.textContent = gameState.upgradesCost.pickaxe;
-    autoMinerCostElement.textContent = gameState.upgradesCost.autoMiner;
-    
-    // Disable/enable buttons based on affordability
-    buyPickaxeButton.disabled = gameState.minerals < gameState.upgradesCost.pickaxe;
-    buyAutoMinerButton.disabled = gameState.minerals < gameState.upgradesCost.autoMiner;
 }
 
 // Initialize the game when page loads
